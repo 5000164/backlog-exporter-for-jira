@@ -2,7 +2,7 @@ package jp._5000164.backlog_exporter_for_jira.interfaces
 
 import com.nulabinc.backlog4j.conf.{BacklogConfigure, BacklogJpConfigure}
 import com.nulabinc.backlog4j.{BacklogClient, BacklogClientFactory, Issue, IssueComment}
-import jp._5000164.backlog_exporter_for_jira.domain.{Project, Comment => JiraComment, Issue => JiraIssue}
+import jp._5000164.backlog_exporter_for_jira.domain.{Jira, Project, Comment => JiraComment, Issue => JiraIssue}
 
 import scala.collection.JavaConverters._
 
@@ -26,7 +26,12 @@ class Backlog(val spaceId: String, val apiKey: String) {
       val body = changeMessage + content
       JiraComment(body, backlogComment.getCreated)
     })
-    val issue = JiraIssue("Open", backlogIssue.getDescription, comments)
+    val issue = JiraIssue(
+      backlogIssue.getDescription,
+      Jira.statusMapping(backlogIssue.getStatus.getName),
+      backlogIssue.getSummary,
+      comments
+    )
     Project("Sample data", "SAM", "software", Seq(issue))
   }
 }
