@@ -20,7 +20,7 @@ class Backlog(val spaceId: String, val apiKey: String) {
   def transform(backlogIssue: Issue, backlogComments: Seq[IssueComment]): Project = {
     val comments = backlogComments.map(backlogComment => {
       val changes = backlogComment.getChangeLog.asScala
-      val formattedChanges = changes.map(change => Some(s"${change.getField}: ${change.getOriginalValue} -> ${change.getNewValue}"))
+      val formattedChanges = changes.flatMap(change => Some(s"${change.getField}: ${change.getOriginalValue} -> ${change.getNewValue}"))
       val changeMessage = if (formattedChanges.nonEmpty) formattedChanges.mkString("\n") + "\n" else ""
       val content = Option(backlogComment.getContent).getOrElse("")
       val body = changeMessage + content
