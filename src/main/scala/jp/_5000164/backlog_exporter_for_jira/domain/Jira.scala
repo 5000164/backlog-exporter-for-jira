@@ -14,6 +14,7 @@ case class Project(
                   )
 
 case class Issue(
+                  description: String,
                   status: String,
                   summary: String,
                   comments: Seq[Comment]
@@ -23,3 +24,12 @@ case class Comment(
                     body: String,
                     created: Date
                   )
+
+object Jira {
+  val statusMapping = Map(
+    "未対応" -> "Open",
+    "処理中" -> "In Progress",
+    "処理済み" -> "Resolved",
+    "完了" -> "Closed"
+  )
+}
